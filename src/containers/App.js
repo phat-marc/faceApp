@@ -9,7 +9,7 @@ import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
 import Rank from '../components/Rank/Rank';
 import '../containers/App.css';
 
-const partiOptions = {
+const particlesOptions = {
   particles: {
     number: {
       value: 80,
@@ -26,7 +26,7 @@ const initialState = {
   imageUrl: '',
   box: {},
   route: 'SignIn',
-  isSignedIn: false
+  isSignedIn: false,
   user: {
     id: '',
     name: '',
@@ -135,7 +135,7 @@ render() {
             </div>
           : (
              route === 'SignIn'
-             ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+             ? <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
              : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             )
         }
