@@ -75,7 +75,7 @@ loadUser = (data) => {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
-      fetch('https://afternoon-hamlet-99774.herokuapp.com/imageurl', {
+      fetch('http://localhost:4000/imageurl', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -85,7 +85,7 @@ loadUser = (data) => {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('https://afternoon-hamlet-99774.herokuapp.com:4000/image', {
+          fetch('http://localhost:4000/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
