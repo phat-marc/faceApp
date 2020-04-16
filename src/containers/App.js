@@ -85,7 +85,7 @@ loadUser = (data) => {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('https://agile-headland-00663.herokuapp.com/image', {
+          fetch('https://agile-headland-00663.herokuapp.com:4000/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
