@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
+import Clarifai from 'clarifai';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Navigation from '../components/Navigation/Navigation';
-import SignIn from '../components/SignIn/SignIn';
+import Signin from '../components/Signin/Signin';
 import Register from '../components/Register/Register';
 import Logo from '../components/Logo/Logo';
 import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
 import Rank from '../components/Rank/Rank';
 import '../containers/App.css';
 
+// This will come out
+const app = new Clarifai.App({
+ apiKey: 'b31981ec82f64cf4a5ea01633511218b'
+});
+
 const particlesOptions = {
-  particles: {
+  particles: { 
     number: {
       value: 80,
       density: {
@@ -25,7 +31,7 @@ const initialState = {
   input: '',
   imageUrl: '',
   box: {},
-  route: 'SignIn',
+  route: 'Signin',
   isSignedIn: false,
   user: {
     id: '',
@@ -36,11 +42,38 @@ const initialState = {
   }
 }
 
+// these will get swapped with the below
+// class App extends Component {
+//   constructor() {
+//     super();
+//     this.state = initialState;
+//   }
+
 class App extends Component {
   constructor() {
     super();
-    this.state = initialState;
+    this.state = {
+      input: '',
+      imageUrl: '',
+      box: {},
+      route: 'signin',
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
+    }
   }
+
+// already finished with this, just leave it
+// componentDidMount() {
+//   fetch('http://localhost:5000/')
+//   .then(response => response.json())
+//   .then(console.log);
+// }
 
 loadUser = (data) => {
   this.setState({user: {
@@ -75,17 +108,22 @@ loadUser = (data) => {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
-      fetch('https://agile-headland-00663.herokuapp.com/imageurl', {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          input: this.state.input
-        })
-      })
-      .then(response => response.json())
+    // gona swap these around later
+    app.models
+      .predict(
+        Clarifai.FACE_DETECT_MODEL,
+        this.state.input)
+      // fetch('http://localhost:3000/', {
+      //   method: 'post',
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: JSON.stringify({
+      //     input: this.state.input
+      //   })
+      // })
+      // .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('https://agile-headland-00663.herokuapp.com:4000/image', {
+          fetch('http://localhost:5000/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -94,7 +132,7 @@ loadUser = (data) => {
           })
             .then(response => response.json())
             .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
+              this.setState(Object.assign(this.state.user, { entries: count }))
             })
             .catch(console.log)
         }
@@ -135,7 +173,7 @@ render() {
             </div>
           : (
              route === 'SignIn'
-             ? <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+             ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
              : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             )
         }

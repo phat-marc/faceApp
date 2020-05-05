@@ -1,8 +1,8 @@
 import React from 'react';
 
-class SignIn extends React.Component {
+class Signin extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props);    
 		this.state = {
 			signInEmail: '',
 			signInPassword: ''
@@ -18,7 +18,7 @@ class SignIn extends React.Component {
 	}
 
 	onSubmitSignIn = () => {
-		fetch('https://agile-headland-00663.herokuapp.com/signin', {
+		fetch('http://localhost:5000/signin', {
 			method: 'post',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({
@@ -82,4 +82,4 @@ class SignIn extends React.Component {
 	}
 }
 
-export default SignIn;
+export default Signin;
