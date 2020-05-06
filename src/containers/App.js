@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import Navigation from '../components/Navigation/Navigation';
 import Signin from '../components/Signin/Signin';
@@ -9,12 +8,7 @@ import Logo from '../components/Logo/Logo';
 import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
 import Rank from '../components/Rank/Rank';
 import '../containers/App.css';
-
-// This will come out
-const app = new Clarifai.App({
- apiKey: 'b31981ec82f64cf4a5ea01633511218b'
-});
-
+   
 const particlesOptions = {
   particles: { 
     number: {
@@ -42,48 +36,21 @@ const initialState = {
   }
 }
 
-// these will get swapped with the below
-// class App extends Component {
-//   constructor() {
-//     super();
-//     this.state = initialState;
-//   }
-
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
-// already finished with this, just leave it
-// componentDidMount() {
-//   fetch('http://localhost:5000/')
-//   .then(response => response.json())
-//   .then(console.log);
-// }
-
-loadUser = (data) => {
-  this.setState({user: {
-    id: data.id,
-    name: data.name,
-    email: data.email,
-    entries: data.entries,
-    joined: data.joined
-  }})
-}
+  loadUser = (data) => {
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+    }})
+  }
   
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box
@@ -100,7 +67,7 @@ loadUser = (data) => {
 
   displayFaceBox = (box) => {
     this.setState({box: box});
-  }
+  }  
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
@@ -108,22 +75,17 @@ loadUser = (data) => {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
-    // gona swap these around later
-    app.models
-      .predict(
-        Clarifai.FACE_DETECT_MODEL,
-        this.state.input)
-      // fetch('http://localhost:3000/', {
-      //   method: 'post',
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: JSON.stringify({
-      //     input: this.state.input
-      //   })
-      // })
-      // .then(response => response.json())
+      fetch('https://rocky-scrubland-60664.herokuapp.com/imageurl', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          input: this.state.input
+        })    
+      })
+      .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('http://localhost:5000/image', {
+          fetch('https://rocky-scrubland-60664.herokuapp.com:5000/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -141,16 +103,16 @@ loadUser = (data) => {
       .catch(err => console.log(err));
   }
 
-onRouteChange = (route) => {
-  if (route === 'signout') {
-    this.setState(initialState)
-  } else if (route === 'home') {
-    this.setState({isSignedIn: true})
+  onRouteChange = (route) => {
+    if (route === 'signout') {
+      this.setState(initialState)
+    } else if (route === 'home') {
+      this.setState({isSignedIn: true})
+    }
+    this.setState({route: route});
   }
-  this.setState({route: route});
-}
 
-render() {
+  render() {
     const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
@@ -169,7 +131,10 @@ render() {
                 onInputChange={this.onInputChange}
                 onButtonSubmit={this.onButtonSubmit}
               />
-              <FaceRecognition box={box} imageUrl={imageUrl} />
+              <FaceRecognition 
+                box={box} 
+                imageUrl={imageUrl} 
+              />
             </div>
           : (
              route === 'SignIn'
