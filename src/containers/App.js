@@ -75,8 +75,8 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
-      fetch('http://localhost:5000/imageurl', {
-      // fetch('https://rocky-scrubland-60664.herokuapp.com/imageurl', {
+      // fetch('http://localhost:5000/imageurl', {
+      fetch('https://rocky-scrubland-60664.herokuapp.com/imageurl', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -86,8 +86,8 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('http://localhost:5000/image', {
-          // fetch('https://rocky-scrubland-60664.herokuapp.com:5000/image', {
+          // fetch('http://localhost:5000/image', {
+          fetch('https://rocky-scrubland-60664.herokuapp.com:5000/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
