@@ -2,6 +2,9 @@
   "name": "faceapp",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "12.14.0"
+  },
   "dependencies": {
     "clarifai": "^2.9.1",
     "express": "^4.17.1",
