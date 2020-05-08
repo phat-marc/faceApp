@@ -1,6 +1,6 @@
 import React from 'react';
 import Tilt from 'react-tilt';
-import face from './face.png';
+import face from './scan.png';
 import './Logo.css';
 
 const Logo = () => {
